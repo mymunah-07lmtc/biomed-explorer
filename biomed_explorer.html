@@ -1,0 +1,2455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BioMed Explorer — Learn Biomedical Engineering!</title>
+        <!-- 🧬 Favicon emoji -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧬</text></svg>" />
+    <style>
+        /* ── Reset & Variables ── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        :root {
+            --primary: #FF6B9D;
+            --primary-dark: #E8558A;
+            --secondary: #4ECDC4;
+            --secondary-dark: #3DBDB5;
+            --accent: #FFE66D;
+            --accent-dark: #F0D74E;
+            --success: #6BCB77;
+            --success-dark: #5AB865;
+            --danger: #FF6B6B;
+            --danger-dark: #E85555;
+            --info: #4D96FF;
+            --info-dark: #3D86EF;
+            --purple: #9B59B6;
+            --purple-dark: #8A49A5;
+            --orange: #FF9F43;
+            --orange-dark: #EF8F33;
+            --bg: #FFF5F7;
+            --card-bg: #FFFFFF;
+            --text: #2D3436;
+            --text-light: #636E72;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.12);
+            --radius: 20px;
+            --radius-sm: 12px;
+        }
+        html {
+            font-size: 16px;
+        }
+        body {
+            font-family: 'Segoe UI', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── Keyframes ── */
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.08);
+            }
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-8px);
+            }
+            75% {
+                transform: translateX(8px);
+            }
+        }
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        @keyframes ecgScroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        @keyframes germSpawn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        @keyframes pop {
+            0% {
+                transform: scale(0);
+            }
+            80% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        @keyframes shieldPulse {
+            0%,
+            100% {
+                box-shadow: inset 0 0 10px var(--info);
+            }
+            50% {
+                box-shadow: inset 0 0 40px var(--info), inset 0 0 80px var(--info);
+            }
+        }
+        @keyframes particleFly {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
+        }
+
+        /* ── Utility ── */
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        .shake {
+            animation: shake 0.4s ease;
+        }
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+        .pop {
+            animation: pop 0.4s ease-out;
+        }
+
+        /* ── Header ── */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: white;
+            padding: 12px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .header-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-stats {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .stat-badge {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .level-badge {
+            background: var(--accent);
+            color: var(--text);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        /* ── Main ── */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: calc(100vh - 140px);
+        }
+
+        /* ── Menu ── */
+        .menu-screen {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .menu-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--purple), var(--info));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        .menu-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto 30px;
+        }
+        .game-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 28px 20px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+        .game-card:hover::before {
+            opacity: 1;
+        }
+        .game-card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .game-card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .game-card-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+        .game-card-score {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ── Game Screens ── */
+        .game-screen {
+            display: none;
+        }
+        .game-screen.active {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+        .game-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .back-btn {
+            background: linear-gradient(135deg, var(--text-light), var(--text));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.2s;
+        }
+        .back-btn:hover {
+            transform: scale(1.05);
+        }
+        .game-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .game-area {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            min-height: 400px;
+        }
+
+        /* ── Matcher ── */
+        .organ-display {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #FFF0F5, #F0F8FF);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+        }
+        .organ-emoji {
+            font-size: 5rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .organ-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .system-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .system-btn {
+            padding: 16px 12px;
+            border: 3px solid var(--secondary);
+            background: white;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text);
+        }
+        .system-btn:hover {
+            background: var(--secondary);
+            color: white;
+            transform: scale(1.05);
+        }
+        .system-btn.correct {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+        .system-btn.wrong {
+            background: var(--danger);
+            border-color: var(--danger);
+            color: white;
+            animation: shake 0.4s;
+        }
+        .system-btn.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .fact-box {
+            background: linear-gradient(135deg, var(--accent), #FFF8DC);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-top: 16px;
+            font-size: 1rem;
+            color: var(--text);
+            border-left: 5px solid var(--accent-dark);
+            display: none;
+        }
+        .fact-box.show {
+            display: block;
+            animation: slideIn 0.3s;
+        }
+        .progress-bar {
+            background: #E8E8E8;
+            border-radius: 50px;
+            height: 12px;
+            margin: 16px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary), var(--purple));
+            height: 100%;
+            border-radius: 50px;
+            transition: width 0.5s ease;
+        }
+        .match-summary {
+            text-align: center;
+            padding: 40px;
+        }
+        .match-summary h2 {
+            font-size: 2rem;
+            color: var(--success);
+            margin-bottom: 16px;
+        }
+        .match-summary p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        /* ── Heart Simulator ── */
+        .ecg-container {
+            background: #0a0a1a;
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            height: 200px;
+            border: 2px solid #1a2a3a;
+        }
+        .ecg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                linear-gradient(rgba(0, 255, 136, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.06) 1px, transparent 1px);
+            background-size: 25px 25px;
+            pointer-events: none;
+        }
+        .ecg-line-wrap {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 200%;
+            height: 120px;
+            transform: translateY(-50%);
+            overflow: visible;
+        }
+        .ecg-line-wrap svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .ecg-line-wrap path {
+            fill: none;
+            stroke: #00FF88;
+            stroke-width: 2.8;
+            filter: drop-shadow(0 0 6px rgba(0, 255, 136, 0.4));
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .ecg-scroll {
+            animation: ecgScroll var(--scroll-speed, 2000ms) linear infinite;
+        }
+        .bpm-display {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #00FF88;
+            font-size: 2.8rem;
+            font-weight: 900;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+            z-index: 2;
+            line-height: 1;
+        }
+        .bpm-label {
+            position: absolute;
+            top: 58px;
+            right: 22px;
+            color: #00FF88;
+            font-size: 0.85rem;
+            opacity: 0.7;
+            z-index: 2;
+            letter-spacing: 1px;
+        }
+        .character-display {
+            text-align: center;
+            font-size: 4rem;
+            margin: 10px 0;
+            animation: float 3s ease-in-out infinite;
+        }
+        .activity-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .activity-btn {
+            padding: 12px 22px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        .activity-btn.sleep {
+            background: linear-gradient(135deg, #6C5CE7, #A29BFE);
+        }
+        .activity-btn.rest {
+            background: linear-gradient(135deg, #74B9FF, #0984E3);
+        }
+        .activity-btn.walk {
+            background: linear-gradient(135deg, #00B894, #55EFC4);
+        }
+        .activity-btn.run {
+            background: linear-gradient(135deg, #FDCB6E, #E17055);
+        }
+        .activity-btn.sprint {
+            background: linear-gradient(135deg, #FF7675, #D63031);
+        }
+        .activity-btn:hover {
+            transform: scale(1.06);
+        }
+        .activity-btn.active {
+            box-shadow: 0 0 0 3px white, 0 0 20px rgba(255, 255, 255, 0.4);
+            transform: scale(1.06);
+        }
+        .pacemaker-info {
+            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 16px;
+            border-left: 5px solid var(--orange);
+        }
+        .pacemaker-info h3 {
+            color: var(--orange-dark);
+            margin-bottom: 8px;
+        }
+        .learn-more-btn {
+            background: var(--info);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s;
+        }
+        .learn-more-btn:hover {
+            transform: scale(1.05);
+        }
+        .learn-more-content {
+            display: none;
+            margin-top: 12px;
+            padding: 16px;
+            background: white;
+            border-radius: var(--radius-sm);
+            line-height: 1.7;
+            color: var(--text);
+            border: 1px solid #eee;
+        }
+        .learn-more-content.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        /* ── Prosthetic Designer ── */
+        .designer-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .designer-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        .designer-panel {
+            background: #F8F9FA;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+        }
+        .designer-panel h3 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        .option-group {
+            margin-bottom: 16px;
+        }
+        .option-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+        .option-cards {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .option-card {
+            flex: 1;
+            min-width: 90px;
+            padding: 12px 8px;
+            border: 3px solid #DDD;
+            background: white;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+        .option-card:hover {
+            border-color: var(--secondary);
+        }
+        .option-card.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #FFF0F5, #FFE4E1);
+            transform: scale(1.05);
+        }
+        .option-card .opt-emoji {
+            font-size: 1.8rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .option-card .opt-name {
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .option-card .opt-desc {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+        .arm-preview {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #E8F4FD, #F0E6FF);
+            border-radius: var(--radius-sm);
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .arm-visual {
+            font-size: 5rem;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+        .arm-stats {
+            width: 100%;
+            max-width: 300px;
+            margin-top: 8px;
+        }
+        .stat-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 6px 0;
+        }
+        .stat-label {
+            width: 75px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: left;
+        }
+        .stat-bar-bg {
+            flex: 1;
+            height: 16px;
+            background: #E8E8E8;
+            border-radius: 50px;
+            overflow: hidden;
+        }
+        .stat-bar-fill {
+            height: 100%;
+            border-radius: 50px;
+            transition: width 0.5s ease;
+        }
+        .stat-value {
+            width: 35px;
+            text-align: right;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+        .test-btn {
+            background: linear-gradient(135deg, var(--success), var(--success-dark));
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+        .test-btn:hover:not(:disabled) {
+            transform: scale(1.03);
+        }
+        .test-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .design-result {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #E8F8E8, #D4EDDA);
+            border-radius: var(--radius-sm);
+            margin-top: 16px;
+        }
+        .design-result.show {
+            display: block;
+            animation: slideIn 0.4s;
+        }
+        .score-circle {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--success), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: white;
+            margin: 0 auto 12px;
+            box-shadow: 0 4px 15px rgba(107, 203, 119, 0.4);
+        }
+
+        /* ── Cell Defender ── */
+        .cell-defender-area {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #E8F8E8, #D5F5E3);
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 3px solid var(--success);
+            cursor: crosshair;
+            touch-action: none;
+        }
+        .cell-defender-area.shield-active {
+            animation: shieldPulse 1s infinite;
+        }
+        .healthy-cell {
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            background: radial-gradient(circle at 30% 30%, #6BCB77, #2D8B3D);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 2px 10px rgba(107, 203, 119, 0.4);
+            transition: all 0.3s;
+            z-index: 2;
+            user-select: none;
+            font-weight: 700;
+        }
+        .healthy-cell.infected {
+            background: radial-gradient(circle at 30% 30%, #B0B0B0, #606060);
+            animation: shake 0.5s;
+        }
+        .healthy-cell.shielded {
+            box-shadow: 0 0 20px var(--info), 0 0 40px var(--info);
+            border: 2px solid var(--info);
+        }
+        .germ {
+            position: absolute;
+            width: 34px;
+            height: 34px;
+            background: radial-gradient(circle at 30% 30%, #FF6B6B, #B71C1C);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.5);
+            animation: germSpawn 0.3s ease-out;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            z-index: 5;
+            transition: transform 0.1s;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        .germ:hover {
+            transform: scale(1.15);
+        }
+        .germ.pop {
+            animation: pop 0.3s ease-out forwards;
+            pointer-events: none;
+        }
+        .powerup {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle at 30% 30%, var(--info), var(--info-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            animation: pulse 1s infinite;
+            box-shadow: 0 0 20px var(--info);
+            z-index: 5;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        .defender-hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .defender-hud span {
+            background: white;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow);
+        }
+        .wave-info {
+            text-align: center;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .start-wave-btn {
+            background: linear-gradient(135deg, var(--success), var(--success-dark));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 10px auto;
+            display: block;
+            transition: transform 0.2s;
+        }
+        .start-wave-btn:hover {
+            transform: scale(1.05);
+        }
+        .combo-display {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent), var(--orange));
+            color: var(--text);
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1rem;
+            display: none;
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(255, 230, 109, 0.4);
+        }
+        .combo-display.show {
+            display: block;
+            animation: bounce 0.5s;
+        }
+        .defender-fact-box {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: #E8F8E8;
+            border-radius: var(--radius-sm);
+            display: none;
+            font-weight: 600;
+            color: var(--success-dark);
+            border-left: 4px solid var(--success);
+            animation: slideIn 0.3s;
+        }
+        .defender-fact-box.show {
+            display: block;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            background: linear-gradient(135deg, var(--secondary), var(--info));
+            color: white;
+            padding: 14px 20px;
+            text-align: center;
+            position: relative;
+        }
+        .fun-fact-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .fun-fact-label {
+            font-weight: 800;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 14px;
+            border-radius: 50px;
+        }
+        .fun-fact-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s;
+        }
+        .modal-content {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            animation: pop 0.4s ease-out;
+        }
+        .modal-content h2 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 1.8rem;
+        }
+        .modal-content p {
+            margin-bottom: 16px;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+        .modal-btn {
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .modal-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: white;
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-hover);
+            display: none;
+            align-items: center;
+            gap: 10px;
+            z-index: 1500;
+            font-weight: 600;
+            animation: slideIn 0.3s;
+            max-width: 320px;
+            border-left: 5px solid var(--info);
+        }
+        .toast.show {
+            display: flex;
+        }
+        .toast.success {
+            border-left-color: var(--success);
+        }
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+        .toast.info {
+            border-left-color: var(--info);
+        }
+
+        /* ── Particle ── */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 3000;
+            animation: particleFly 0.9s ease-out forwards;
+            font-size: 1.4rem;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            .header-title {
+                font-size: 1.1rem;
+            }
+            .stat-badge {
+                font-size: 0.75rem;
+                padding: 4px 10px;
+            }
+            .game-card {
+                padding: 20px 16px;
+            }
+            .game-card-icon {
+                font-size: 2.5rem;
+            }
+            .organ-emoji {
+                font-size: 3.5rem;
+            }
+            .ecg-container {
+                height: 150px;
+            }
+            .bpm-display {
+                font-size: 2rem;
+            }
+            .cell-defender-area {
+                height: 300px;
+            }
+            .activity-btn {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+            }
+            .option-card {
+                min-width: 70px;
+                padding: 10px 6px;
+            }
+            .arm-visual {
+                font-size: 3.5rem;
+            }
+            .designer-panel {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── HEADER ─── -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-title">🔬 BioMed Explorer</div>
+            <div class="header-stats">
+                <div class="stat-badge">🏆 <span id="header-score">0</span></div>
+                <div class="stat-badge">⭐ <span id="header-kp">0</span></div>
+                <div class="level-badge">Lv. <span id="header-level">1</span></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ─── MAIN ─── -->
+    <div class="main-container">
+
+        <!-- ─── MENU ─── -->
+        <div id="menu-screen" class="menu-screen">
+            <h1 class="menu-title bounce">🔬 BioMed Explorer</h1>
+            <p class="menu-subtitle">Learn Biomedical Engineering Through Fun Mini-Games!</p>
+            <p class="menu-subtitle">By Maimouna Tougoutcho Coulibaly</p>
+            <div class="game-grid">
+                <div class="game-card" data-game="matcher">
+                    <span class="game-card-icon">🫀</span>
+                    <div class="game-card-title">Body System Matcher</div>
+                    <div class="game-card-desc">Match organs to their body systems and learn amazing facts!</div>
+                    <div class="game-card-score">Best: <span id="best-matcher">0</span></div>
+                </div>
+                <div class="game-card" data-game="heart">
+                    <span class="game-card-icon">💓</span>
+                    <div class="game-card-title">Heart Rate Simulator</div>
+                    <div class="game-card-desc">Explore how your heart beats during different activities!</div>
+                    <div class="game-card-score">Best: <span id="best-heart">0</span></div>
+                </div>
+                <div class="game-card" data-game="prosthetic">
+                    <span class="game-card-icon">🦾</span>
+                    <div class="game-card-title">Prosthetic Designer</div>
+                    <div class="game-card-desc">Design the perfect prosthetic arm with different materials!</div>
+                    <div class="game-card-score">Best: <span id="best-prosthetic">0</span></div>
+                </div>
+                <div class="game-card" data-game="defender">
+                    <span class="game-card-icon">🛡️</span>
+                    <div class="game-card-title">Cell Defender</div>
+                    <div class="game-card-desc">Protect healthy cells from germs in this action game!</div>
+                    <div class="game-card-score">Best: <span id="best-defender">0</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── GAME: MATCHER ─── -->
+        <div id="game-matcher" class="game-screen">
+            <div class="game-header">
+                <button class="back-btn" onclick="backToMenu()">← Back</button>
+                <div class="game-title">🫀 Body System Matcher</div>
+            </div>
+            <div class="game-area">
+                <div class="progress-bar"><div class="progress-fill" id="matcher-progress" style="width:0%"></div></div>
+                <div id="matcher-question">
+                    <div class="organ-display">
+                        <span class="organ-emoji" id="organ-emoji">❤️</span>
+                        <div class="organ-name" id="organ-name">Heart</div>
+                    </div>
+                    <p style="text-align:center;margin-bottom:16px;font-weight:600;color:var(--text-light)">Which body system does this organ belong to?</p>
+                    <div class="system-buttons" id="system-buttons"></div>
+                    <div class="fact-box" id="organ-fact"></div>
+                </div>
+                <div id="matcher-summary" class="match-summary" style="display:none">
+                    <h2>🎉 Round Complete!</h2>
+                    <p id="matcher-summary-text"></p>
+                    <button class="modal-btn" onclick="initMatcher()">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── GAME: HEART ─── -->
+        <div id="game-heart" class="game-screen">
+            <div class="game-header">
+                <button class="back-btn" onclick="backToMenu()">← Back</button>
+                <div class="game-title">💓 Heart Rate Simulator</div>
+            </div>
+            <div class="game-area">
+                <div class="ecg-container" id="ecg-container">
+                    <div class="ecg-grid"></div>
+                    <div class="ecg-line-wrap ecg-scroll" id="ecg-line-wrap">
+                        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+                            <path id="ecg-path" d="M0,60 L1200,60" />
+                        </svg>
+                    </div>
+                    <div class="bpm-display" id="bpm-display">75</div>
+                    <div class="bpm-label">BPM</div>
+                </div>
+                <div class="character-display" id="character-display">🧑</div>
+                <div class="activity-buttons">
+                    <button class="activity-btn sleep" data-activity="sleep">😴 Sleeping</button>
+                    <button class="activity-btn rest" data-activity="rest">🪑 Resting</button>
+                    <button class="activity-btn walk" data-activity="walk">🚶 Walking</button>
+                    <button class="activity-btn run" data-activity="run">🏃 Running</button>
+                    <button class="activity-btn sprint" data-activity="sprint">⚡ Sprinting</button>
+                </div>
+                <div class="pacemaker-info">
+                    <h3>⚡ Did You Know?</h3>
+                    <p>Biomedical engineers design <strong>pacemakers</strong> — tiny devices that help regulate heart rhythm using electrical impulses. Over 3 million people worldwide rely on them!</p>
+                    <button class="learn-more-btn" onclick="toggleLearnMore()">📖 Learn More</button>
+                    <div class="learn-more-content" id="learn-more-content">
+                        <p>Heart rate monitors use <strong>electrocardiography (ECG/EKG)</strong> to detect electrical signals from your heart. Biomedical engineers have developed wearable versions that can detect irregular rhythms, predict heart attacks, and even send alerts to doctors remotely. Modern smartwatches use photoplethysmography (PPG) — shining light through your skin to measure blood flow!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── GAME: PROSTHETIC ─── -->
+        <div id="game-prosthetic" class="game-screen">
+            <div class="game-header">
+                <button class="back-btn" onclick="backToMenu()">← Back</button>
+                <div class="game-title">🦾 Prosthetic Designer</div>
+            </div>
+            <div class="game-area">
+                <div class="designer-layout">
+                    <div class="designer-panel">
+                        <h3>🔧 Design Your Prosthetic Arm</h3>
+                        <div class="option-group">
+                            <label>Material</label>
+                            <div class="option-cards" id="material-options">
+                                <div class="option-card" data-category="material" data-value="plastic">
+                                    <span class="opt-emoji">🧱</span>
+                                    <span class="opt-name">Plastic</span>
+                                    <span class="opt-desc">Light, affordable</span>
+                                </div>
+                                <div class="option-card" data-category="material" data-value="metal">
+                                    <span class="opt-emoji">🔩</span>
+                                    <span class="opt-name">Metal</span>
+                                    <span class="opt-desc">Strong, heavy</span>
+                                </div>
+                                <div class="option-card" data-category="material" data-value="carbon">
+                                    <span class="opt-emoji">⚫</span>
+                                    <span class="opt-name">Carbon Fiber</span>
+                                    <span class="opt-desc">Ultra light, strong</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="option-group">
+                            <label>Hand Type</label>
+                            <div class="option-cards" id="hand-options">
+                                <div class="option-card" data-category="hand" data-value="hook">
+                                    <span class="opt-emoji">🪝</span>
+                                    <span class="opt-name">Hook</span>
+                                    <span class="opt-desc">Simple, durable</span>
+                                </div>
+                                <div class="option-card" data-category="hand" data-value="mechanical">
+                                    <span class="opt-emoji">✋</span>
+                                    <span class="opt-name">Mechanical</span>
+                                    <span class="opt-desc">Good grip</span>
+                                </div>
+                                <div class="option-card" data-category="hand" data-value="bionic">
+                                    <span class="opt-emoji">🤖</span>
+                                    <span class="opt-name">Bionic</span>
+                                    <span class="opt-desc">High dexterity</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="option-group">
+                            <label>Power Source</label>
+                            <div class="option-cards" id="power-options">
+                                <div class="option-card" data-category="power" data-value="body">
+                                    <span class="opt-emoji">💪</span>
+                                    <span class="opt-name">Body-Powered</span>
+                                    <span class="opt-desc">No battery needed</span>
+                                </div>
+                                <div class="option-card" data-category="power" data-value="electric">
+                                    <span class="opt-emoji">🔋</span>
+                                    <span class="opt-name">Electric</span>
+                                    <span class="opt-desc">Reliable power</span>
+                                </div>
+                                <div class="option-card" data-category="power" data-value="myo">
+                                    <span class="opt-emoji">⚡</span>
+                                    <span class="opt-name">Myoelectric</span>
+                                    <span class="opt-desc">Muscle-controlled</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="test-btn" id="test-btn" onclick="testDesign()" disabled>🧪 Test Design</button>
+                    </div>
+                    <div>
+                        <div class="arm-preview">
+                            <div class="arm-visual" id="arm-visual">🦾</div>
+                            <div id="arm-desc" style="font-weight:600;color:var(--text-light);font-size:0.95rem;">Select all options to see your design!</div>
+                        </div>
+                        <div class="arm-stats" id="arm-stats" style="display:none">
+                            <div class="stat-row">
+                                <span class="stat-label">Weight</span>
+                                <div class="stat-bar-bg"><div class="stat-bar-fill" id="stat-weight" style="width:0%;background:var(--info)"></div></div>
+                                <span class="stat-value" id="val-weight">0</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-label">Durability</span>
+                                <div class="stat-bar-bg"><div class="stat-bar-fill" id="stat-durability" style="width:0%;background:var(--success)"></div></div>
+                                <span class="stat-value" id="val-durability">0</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-label">Cost</span>
+                                <div class="stat-bar-bg"><div class="stat-bar-fill" id="stat-cost" style="width:0%;background:var(--orange)"></div></div>
+                                <span class="stat-value" id="val-cost">0</span>
+                            </div>
+                        </div>
+                        <div class="design-result" id="design-result">
+                            <div class="score-circle" id="design-score">85</div>
+                            <h3 id="design-feedback">Great balance!</h3>
+                            <p id="design-detail">Your prosthetic is well-designed.</p>
+                            <button class="modal-btn" onclick="resetDesign()" style="margin-top:10px">Design Another</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── GAME: DEFENDER ─── -->
+        <div id="game-defender" class="game-screen">
+            <div class="game-header">
+                <button class="back-btn" onclick="backToMenu()">← Back</button>
+                <div class="game-title">🛡️ Cell Defender</div>
+            </div>
+            <div class="game-area">
+                <div class="defender-hud">
+                    <span>🎯 Score: <span id="defender-score">0</span></span>
+                    <span>🌊 Wave: <span id="defender-wave">0</span></span>
+                    <span>❤️ Cells: <span id="defender-cells">5</span></span>
+                    <span>🔥 Combo: x<span id="defender-combo">1</span></span>
+                </div>
+                <div class="wave-info" id="wave-info">Click "Start Wave" to begin!</div>
+                <div class="cell-defender-area" id="defender-area">
+                    <div class="combo-display" id="combo-display">🔥 Combo x3!</div>
+                </div>
+                <button class="start-wave-btn" id="start-wave-btn" onclick="startWave()">▶️ Start Wave</button>
+                <div class="defender-fact-box" id="defender-fact"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ─── FOOTER ─── -->
+    <footer class="footer">
+        <div class="fun-fact-container">
+            <span class="fun-fact-label">💡 Fun Fact</span>
+            <span class="fun-fact-text" id="fun-fact-text">Loading...</span>
+        </div>
+    </footer>
+
+    <!-- ─── TOAST ─── -->
+    <div id="toast" class="toast"><span id="toast-icon"></span><span id="toast-msg"></span></div>
+
+    <!-- ─── MODAL ─── -->
+    <div id="modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="modal-title">Title</h2>
+            <p id="modal-text">Message</p>
+            <button class="modal-btn" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <!-- ─── SCRIPT ─── -->
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  DATA
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        const FUN_FACTS = [
+            "Your heart beats about 100,000 times every single day!",
+            "The human body has 206 bones — but babies are born with approximatively 300!",
+            "Your brain uses 20% of your body's total energy.",
+            "Biomedical engineers created the first artificial heart in 1982.",
+            "Your skin is your largest organ, covering about 22 square feet!",
+            "The first pacemaker was invented in 1958 and lasted 3 hours.",
+            "Red blood cells live for about 120 days before being recycled.",
+            "3D printing is now used to create custom prosthetic limbs!",
+            "Your stomach produces a new layer of mucus every 2 weeks.",
+            "Biomedical engineers design contact lenses that can measure glucose.",
+            "The human eye can distinguish about 10 million different colors.",
+            "Vaccines train your immune system to recognize and fight germs.",
+            "Your kidneys filter about 50 gallons of blood every day.",
+            "Cochlear implants help over 700,000 people hear worldwide.",
+            "Your muscles make up about 40% of your body weight.",
+            "MRI machines use powerful magnets 30,000x stronger than Earth's.",
+            "Biomedical engineers are developing bionic eyes for the blind.",
+            "Your lungs contain about 300 million tiny air sacs called alveoli.",
+            "The first successful organ transplant was a kidney in 1954.",
+            "Smart bandages can now monitor wounds and release medicine automatically.",
+            "Your body has about 37 trillion cells — each one is a tiny factory!",
+            "Biomedical engineers use AI to detect cancer in medical images.",
+            "Your small intestine is about 20 feet long when stretched out!",
+            "Exoskeletons designed by biomedical engineers help paralyzed people walk.",
+            "Your nose can remember 50,000 different scents.",
+            "Micro-robots are being developed to swim through your bloodstream!",
+            "Your liver is the only organ that can completely regenerate itself.",
+            "Biomedical engineers created the first bionic hand with a sense of touch.",
+            "Your body produces about 2 million red blood cells every second.",
+            "Lab-grown organs from stem cells may eliminate transplant waiting lists!",
+            "Your ears never stop growing throughout your entire life.",
+            "Biomedical engineers design prosthetic limbs that can be controlled by thoughts!"
+        ];
+
+        const ORGAN_DATA = [
+            { name: "Heart", emoji: "❤️", system: "Circulatory",
+                fact: "Your heart beats about 100,000 times a day, pumping 2,000 gallons of blood!" },
+            { name: "Lungs", emoji: "🫁", system: "Respiratory",
+                fact: "Your lungs contain 300 million alveoli — if spread out, they'd cover a tennis court!" },
+            { name: "Brain", emoji: "🧠", system: "Nervous",
+                fact: "Your brain has about 86 billion neurons, each connected to thousands of others!" },
+            { name: "Bones", emoji: "🦴", system: "Skeletal",
+                fact: "Bones are stronger than steel by weight and can heal themselves when broken!" },
+            { name: "Stomach", emoji: "🫃", system: "Digestive",
+                fact: "Your stomach acid is strong enough to dissolve metal — but mucus protects your stomach lining!" },
+            { name: "Kidneys", emoji: "🫘", system: "Urinary",
+                fact: "Your kidneys filter about 50 gallons of blood daily to produce just 1-2 quarts of urine!" },
+            { name: "Skin", emoji: "🧴", system: "Integumentary",
+                fact: "Your skin is your largest organ and sheds about 30,000 dead cells every minute!" },
+            { name: "Muscles", emoji: "💪", system: "Muscular",
+                fact: "The strongest muscle relative to size is your jaw muscle — it can close with 200 pounds of force!" },
+            { name: "Eyes", emoji: "👁️", system: "Sensory",
+                fact: "Your eyes can distinguish about 10 million colors and process images in just 13 milliseconds!" },
+            { name: "Ears", emoji: "👂", system: "Sensory",
+                fact: "Your ears never stop growing, and they help you maintain balance, not just hear!" },
+            { name: "Liver", emoji: "🫀", system: "Digestive",
+                fact: "The liver is the only organ that can fully regenerate itself — even if 75% is removed!" },
+            { name: "Spinal Cord", emoji: "🦴", system: "Nervous",
+                fact: "Messages travel through your spinal cord at speeds up to 268 mph!" },
+            { name: "Blood Vessels", emoji: "🩸", system: "Circulatory",
+                fact: "If laid end-to-end, your blood vessels would stretch about 60,000 miles — enough to circle Earth twice!" },
+            { name: "Pancreas", emoji: "🫘", system: "Digestive",
+                fact: "The pancreas produces insulin, a hormone that biomedical engineers have learned to synthesize for diabetics!" },
+            { name: "Nerves", emoji: "⚡", system: "Nervous",
+                fact: "Your nervous system sends signals faster than a Formula 1 car drives — up to 268 mph!" }
+        ];
+
+        const SYSTEMS = ["Circulatory", "Respiratory", "Nervous", "Skeletal", "Digestive", "Urinary", "Integumentary", "Muscular",
+            "Sensory"
+        ];
+
+        const ACTIVITIES = {
+            sleep: { bpm: 58, emoji: "😴", char: "🛌", label: "Sleeping" },
+            rest: { bpm: 75, emoji: "🪑", char: "🧑", label: "Resting" },
+            walk: { bpm: 100, emoji: "🚶", char: "🚶", label: "Walking" },
+            run: { bpm: 140, emoji: "🏃", char: "🏃", label: "Running" },
+            sprint: { bpm: 185, emoji: "⚡", char: "🏃💨", label: "Sprinting" }
+        };
+
+        const MATERIALS = {
+            plastic: { weight: 90, durability: 40, cost: 20, name: "Plastic" },
+            metal: { weight: 30, durability: 90, cost: 50, name: "Metal" },
+            carbon: { weight: 80, durability: 85, cost: 75, name: "Carbon Fiber" }
+        };
+        const HANDS = {
+            hook: { grip: 50, dexterity: 30, name: "Hook" },
+            mechanical: { grip: 75, dexterity: 60, name: "Mechanical" },
+            bionic: { grip: 70, dexterity: 95, name: "Bionic" }
+        };
+        const POWERS = {
+            body: { battery: 100, control: 50, name: "Body-Powered" },
+            electric: { battery: 70, control: 75, name: "Electric" },
+            myo: { battery: 60, control: 95, name: "Myoelectric" }
+        };
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  STATE
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        let state = {
+            score: 0,
+            knowledgePoints: 0,
+            level: 1,
+            bestScores: { matcher: 0, heart: 0, prosthetic: 0, defender: 0 },
+            heartExplored: [],
+            matcherRound: 0,
+            matcherScore: 0,
+            matcherPool: [],
+            matcherCurrent: null,
+            prostheticSelections: { material: null, hand: null, power: null },
+            defender: {
+                score: 0,
+                wave: 0,
+                cells: [],
+                germs: [],
+                combo: 0,
+                maxCombo: 1,
+                shieldActive: false,
+                running: false,
+                powerups: [],
+                gameScore: 0,
+                totalGerms: 0,
+                spawnedCount: 0,
+                spawningComplete: false
+            }
+        };
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  PERSISTENCE
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function loadState() {
+            try {
+                const saved = localStorage.getItem('biomed_explorer_state');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    state = Object.assign({}, state, parsed);
+                }
+            } catch (e) { /* ignore */ }
+            updateHeader();
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem('biomed_explorer_state', JSON.stringify({
+                    score: state.score,
+                    knowledgePoints: state.knowledgePoints,
+                    level: state.level,
+                    bestScores: state.bestScores,
+                    heartExplored: state.heartExplored
+                }));
+            } catch (e) { /* ignore */ }
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  CORE HELPERS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function addScore(points) {
+            state.score += points;
+            const thresholds = [0, 100, 250, 500, 1000, 1500, 2200, 3000, 4000, 5500, 7500];
+            let newLevel = 1;
+            for (let i = thresholds.length - 1; i >= 0; i--) {
+                if (state.score >= thresholds[i]) { newLevel = i + 1; break; }
+            }
+            if (newLevel > state.level) {
+                state.level = newLevel;
+                showModal('🎉 Level Up!', 'Congratulations! You reached Level ' + state.level +
+                    '! Keep exploring biomedical engineering!');
+            }
+            updateHeader();
+            saveState();
+        }
+
+        function addKnowledgePoints(points) {
+            state.knowledgePoints += points;
+            updateHeader();
+            saveState();
+        }
+
+        function updateHeader() {
+            document.getElementById('header-score').textContent = state.score;
+            document.getElementById('header-kp').textContent = state.knowledgePoints;
+            document.getElementById('header-level').textContent = state.level;
+            document.getElementById('best-matcher').textContent = state.bestScores.matcher;
+            document.getElementById('best-heart').textContent = state.bestScores.heart;
+            document.getElementById('best-prosthetic').textContent = state.bestScores.prosthetic;
+            document.getElementById('best-defender').textContent = state.bestScores.defender;
+        }
+
+        function showToast(msg, type, icon) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            document.getElementById('toast-icon').textContent = icon || '';
+            toast.className = 'toast show ' + type;
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(function() { toast.classList.remove('show'); }, 2800);
+        }
+
+        function showModal(title, text) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-text').textContent = text;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  NAVIGATION
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function showGame(gameId) {
+            document.querySelectorAll('.game-screen').forEach(function(s) { s.classList.remove('active'); });
+            document.getElementById('menu-screen').style.display = 'none';
+            document.getElementById('game-' + gameId).classList.add('active');
+            if (gameId === 'matcher') initMatcher();
+            if (gameId === 'heart') initHeart();
+            if (gameId === 'prosthetic') initProsthetic();
+            if (gameId === 'defender') initDefender();
+        }
+
+        function backToMenu() {
+            stopDefender();
+            document.querySelectorAll('.game-screen').forEach(function(s) { s.classList.remove('active'); });
+            document.getElementById('menu-screen').style.display = 'block';
+            updateHeader();
+        }
+
+        // Menu card clicks
+        document.querySelectorAll('.game-card[data-game]').forEach(function(card) {
+            card.addEventListener('click', function() {
+                showGame(this.dataset.game);
+            });
+        });
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  FUN FACT ROTATOR
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        let factIndex = 0;
+
+        function rotateFact() {
+            factIndex = (factIndex + 1) % FUN_FACTS.length;
+            const el = document.getElementById('fun-fact-text');
+            el.style.opacity = '0';
+            setTimeout(function() {
+                el.textContent = FUN_FACTS[factIndex];
+                el.style.opacity = '1';
+            }, 300);
+        }
+        setInterval(rotateFact, 30000);
+        document.getElementById('fun-fact-text').textContent = FUN_FACTS[0];
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  GAME: MATCHER
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function initMatcher() {
+            state.matcherRound = 0;
+            state.matcherScore = 0;
+            state.matcherPool = ORGAN_DATA.slice().sort(function() { return Math.random() - 0.5; }).slice(0, 10);
+            document.getElementById('matcher-question').style.display = 'block';
+            document.getElementById('matcher-summary').style.display = 'none';
+            document.getElementById('organ-fact').classList.remove('show');
+            updateMatcherProgress();
+            showNextOrgan();
+        }
+
+        function updateMatcherProgress() {
+            const pct = (state.matcherRound / 10) * 100;
+            document.getElementById('matcher-progress').style.width = pct + '%';
+        }
+
+        function showNextOrgan() {
+            if (state.matcherRound >= 10) {
+                endMatcher();
+                return;
+            }
+            const organ = state.matcherPool[state.matcherRound];
+            state.matcherCurrent = organ;
+            document.getElementById('organ-emoji').textContent = organ.emoji;
+            document.getElementById('organ-name').textContent = organ.name;
+            document.getElementById('organ-fact').classList.remove('show');
+
+            const container = document.getElementById('system-buttons');
+            container.innerHTML = '';
+            const shuffled = SYSTEMS.slice().sort(function() { return Math.random() - 0.5; });
+            shuffled.forEach(function(sys) {
+                const btn = document.createElement('button');
+                btn.className = 'system-btn';
+                btn.textContent = sys;
+                btn.addEventListener('click', function() { checkSystem(sys, btn); });
+                container.appendChild(btn);
+            });
+        }
+
+        function checkSystem(system, btn) {
+            const factBox = document.getElementById('organ-fact');
+            const buttons = document.querySelectorAll('.system-btn');
+            buttons.forEach(function(b) { b.classList.add('disabled'); });
+
+            if (system === state.matcherCurrent.system) {
+                btn.classList.add('correct');
+                state.matcherScore += 10;
+                addScore(10);
+                addKnowledgePoints(2);
+                showToast('Correct! +10 points', 'success', '✅');
+                factBox.innerHTML = '<strong>🎓 ' + state.matcherCurrent.name + ' Fact:</strong> ' + state.matcherCurrent
+                    .fact;
+                factBox.classList.add('show');
+                spawnParticles(btn, '🎉');
+                setTimeout(function() {
+                    state.matcherRound++;
+                    updateMatcherProgress();
+                    showNextOrgan();
+                }, 2000);
+            } else {
+                btn.classList.add('wrong');
+                state.matcherScore = Math.max(0, state.matcherScore - 2);
+                showToast('Not quite! Hint: What does ' + state.matcherCurrent.name + ' do?', 'error', '❌');
+                setTimeout(function() {
+                    buttons.forEach(function(b) { b.classList.remove('disabled', 'wrong'); });
+                }, 1200);
+            }
+        }
+
+        function endMatcher() {
+            document.getElementById('matcher-question').style.display = 'none';
+            document.getElementById('matcher-summary').style.display = 'block';
+            const bonus = state.matcherScore >= 80 ? 20 : state.matcherScore >= 50 ? 10 : 0;
+            const total = state.matcherScore + bonus;
+            document.getElementById('matcher-summary-text').innerHTML =
+                'You scored <strong>' + state.matcherScore + '/100</strong>!<br>' +
+                (bonus > 0 ? 'Bonus: +' + bonus + ' points!<br>' : '') +
+                'Total earned: <strong>' + total + ' points</strong><br>' +
+                'Knowledge Points: +' + (state.matcherRound * 2) + ' ⭐';
+            if (total > state.bestScores.matcher) {
+                state.bestScores.matcher = total;
+                showToast('New Best Score!', 'success', '🏆');
+            }
+            addScore(bonus);
+            addKnowledgePoints(5);
+            saveState();
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  GAME: HEART — FIXED ECG
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        let currentBPM = 75;
+        let ecgAnimFrame = null;
+
+        function initHeart() {
+            currentBPM = 75;
+            document.getElementById('bpm-display').textContent = '75';
+            document.getElementById('character-display').textContent = '🧑';
+            document.querySelectorAll('.activity-btn').forEach(function(b) { b.classList.remove('active'); });
+            document.querySelector('.activity-btn.rest').classList.add('active');
+            buildECG(75);
+        }
+
+        function buildECG(bpm) {
+            const path = document.getElementById('ecg-path');
+            const svgWidth = 1200;
+            const amplitude = 42;
+            const baseline = 60;
+
+            // Number of heartbeats visible based on BPM (more beats = more cycles)
+            const cycles = Math.max(3, Math.round(bpm / 25));
+            const cycleWidth = svgWidth / cycles;
+
+            let d = '';
+            const steps = svgWidth * 2; // double resolution for smoothness
+
+            for (let i = 0; i <= steps; i++) {
+                const x = (i / steps) * svgWidth;
+                const cyclePos = (x % cycleWidth) / cycleWidth; // 0..1 within cycle
+                let y = baseline;
+
+                // Realistic ECG shape per cycle
+                if (cyclePos < 0.05) {
+                    // flat
+                    y = baseline;
+                } else if (cyclePos < 0.12) {
+                    // P wave (small bump)
+                    const t = (cyclePos - 0.05) / 0.07;
+                    y = baseline - amplitude * 0.25 * Math.sin(t * Math.PI);
+                } else if (cyclePos < 0.18) {
+                    // PR segment (flat)
+                    y = baseline;
+                } else if (cyclePos < 0.22) {
+                    // Q wave (small dip)
+                    const t = (cyclePos - 0.18) / 0.04;
+                    y = baseline + amplitude * 0.3 * t;
+                } else if (cyclePos < 0.27) {
+                    // R wave (tall peak)
+                    const t = (cyclePos - 0.22) / 0.05;
+                    y = baseline - amplitude * 0.9 * Math.sin(t * Math.PI);
+                } else if (cyclePos < 0.30) {
+                    // S wave (dip)
+                    const t = (cyclePos - 0.27) / 0.03;
+                    y = baseline + amplitude * 0.5 * t;
+                } else if (cyclePos < 0.35) {
+                    // ST segment (slight elevation)
+                    const t = (cyclePos - 0.30) / 0.05;
+                    y = baseline - amplitude * 0.08 * Math.sin(t * Math.PI * 0.5);
+                } else if (cyclePos < 0.48) {
+                    // T wave (wide bump)
+                    const t = (cyclePos - 0.35) / 0.13;
+                    y = baseline - amplitude * 0.35 * Math.sin(t * Math.PI);
+                } else {
+                    // Return to baseline
+                    const t = (cyclePos - 0.48) / 0.52;
+                    y = baseline + amplitude * 0.05 * Math.sin(t * Math.PI * 0.3);
+                }
+
+                // Add tiny noise for realism
+                const noise = (Math.random() - 0.5) * 1.2;
+                y += noise;
+
+                if (i === 0) {
+                    d += 'M' + x + ',' + y;
+                } else {
+                    d += ' L' + x + ',' + y;
+                }
+            }
+
+            path.setAttribute('d', d);
+
+            // Update scroll speed based on BPM
+            const wrap = document.getElementById('ecg-line-wrap');
+            const scrollMs = Math.max(800, Math.min(4000, 60000 / bpm * 1.2));
+            wrap.style.setProperty('--scroll-speed', scrollMs + 'ms');
+            // Re-trigger animation
+            wrap.style.animation = 'none';
+            void wrap.offsetHeight;
+            wrap.style.animation = 'ecgScroll ' + scrollMs + 'ms linear infinite';
+        }
+
+        function setActivity(act) {
+            const data = ACTIVITIES[act];
+            currentBPM = data.bpm;
+            document.getElementById('bpm-display').textContent = data.bpm;
+            document.getElementById('character-display').textContent = data.char;
+            document.querySelectorAll('.activity-btn').forEach(function(b) { b.classList.remove('active'); });
+            document.querySelector('.activity-btn[data-activity="' + act + '"]').classList.add('active');
+
+            // Rebuild ECG with new BPM
+            buildECG(data.bpm);
+
+            if (state.heartExplored.indexOf(act) === -1) {
+                state.heartExplored.push(act);
+                addKnowledgePoints(5);
+                addScore(5);
+                showToast('First time ' + data.label + '! +5 KP ⭐', 'info', '⭐');
+                saveState();
+            }
+
+            if (state.heartExplored.length >= 5 && state.bestScores.heart < 50) {
+                state.bestScores.heart = 50;
+                addScore(50);
+                showToast('Heart Explorer Badge! +50 points', 'success', '🏆');
+                saveState();
+            }
+        }
+
+        // Activity button click listeners
+        document.querySelectorAll('.activity-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                setActivity(this.dataset.activity);
+            });
+        });
+
+        function toggleLearnMore() {
+            document.getElementById('learn-more-content').classList.toggle('show');
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  GAME: PROSTHETIC
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function initProsthetic() {
+            state.prostheticSelections = { material: null, hand: null, power: null };
+            document.querySelectorAll('.option-card').forEach(function(c) { c.classList.remove('selected'); });
+            document.getElementById('arm-stats').style.display = 'none';
+            document.getElementById('design-result').classList.remove('show');
+            document.getElementById('test-btn').disabled = true;
+            document.getElementById('arm-desc').textContent = 'Select all options to see your design!';
+            document.getElementById('arm-visual').textContent = '🦾';
+        }
+
+        function selectOption(category, value, el) {
+            state.prostheticSelections[category] = value;
+
+            const container = document.getElementById(category + '-options');
+            container.querySelectorAll('.option-card').forEach(function(c) { c.classList.remove('selected'); });
+            el.classList.add('selected');
+
+            updateArmPreview();
+
+            const s = state.prostheticSelections;
+            if (s.material && s.hand && s.power) {
+                document.getElementById('test-btn').disabled = false;
+            }
+        }
+
+        // Option card click listeners
+        document.querySelectorAll('.option-card').forEach(function(card) {
+            card.addEventListener('click', function(e) {
+                const category = this.dataset.category;
+                const value = this.dataset.value;
+                selectOption(category, value, this);
+            });
+        });
+
+        function updateArmPreview() {
+            const s = state.prostheticSelections;
+            let desc = [];
+            if (s.material) desc.push(MATERIALS[s.material].name);
+            if (s.hand) desc.push(HANDS[s.hand].name + ' hand');
+            if (s.power) desc.push(POWERS[s.power].name);
+
+            if (desc.length === 3) {
+                document.getElementById('arm-desc').textContent = desc.join(' + ');
+                document.getElementById('arm-visual').textContent = '🦾';
+
+                const m = MATERIALS[s.material];
+                const h = HANDS[s.hand];
+                const p = POWERS[s.power];
+
+                const weight = Math.round((m.weight + (100 - h.grip) * 0.3 + (100 - p.battery) * 0.2) / 2);
+                const durability = Math.round((m.durability + h.grip * 0.5 + p.control * 0.3) / 2);
+                const cost = Math.round((m.cost + h.dexterity * 0.5 + p.control * 0.5) / 2);
+
+                document.getElementById('stat-weight').style.width = Math.min(100, weight) + '%';
+                document.getElementById('val-weight').textContent = weight;
+                document.getElementById('stat-durability').style.width = Math.min(100, durability) + '%';
+                document.getElementById('val-durability').textContent = durability;
+                document.getElementById('stat-cost').style.width = Math.min(100, cost) + '%';
+                document.getElementById('val-cost').textContent = cost;
+                document.getElementById('arm-stats').style.display = 'block';
+            }
+        }
+
+        function testDesign() {
+            const s = state.prostheticSelections;
+            const m = MATERIALS[s.material];
+            const h = HANDS[s.hand];
+            const p = POWERS[s.power];
+
+            const weight = Math.round((m.weight + (100 - h.grip) * 0.3 + (100 - p.battery) * 0.2) / 2);
+            const durability = Math.round((m.durability + h.grip * 0.5 + p.control * 0.3) / 2);
+            const cost = Math.round((m.cost + h.dexterity * 0.5 + p.control * 0.5) / 2);
+
+            const score = Math.round((weight * 0.3 + durability * 0.4 + (100 - cost) * 0.3));
+
+            let feedback, detail;
+            if (score >= 85) {
+                feedback = "🏆 Outstanding Design!";
+                detail = "Your prosthetic achieves an excellent balance of weight, durability, and affordability. Biomedical engineers would be proud!";
+            } else if (score >= 70) {
+                feedback = "⭐ Great Design!";
+                detail = "A solid prosthetic with good overall performance. Minor tweaks could make it even better.";
+            } else if (score >= 50) {
+                feedback = "👍 Good Start!";
+                detail = "Your design works, but consider trade-offs. Maybe a lighter material or better power source?";
+            } else {
+                feedback = "🔧 Needs Improvement";
+                detail = "This combination has some challenges. Try balancing weight, durability, and cost more carefully.";
+            }
+
+            document.getElementById('design-score').textContent = score;
+            document.getElementById('design-feedback').textContent = feedback;
+            document.getElementById('design-detail').textContent = detail;
+            document.getElementById('design-result').classList.add('show');
+
+            const earned = Math.max(10, score);
+            addScore(earned);
+            addKnowledgePoints(3);
+
+            if (earned > state.bestScores.prosthetic) {
+                state.bestScores.prosthetic = earned;
+                showToast('New Best Design! +' + earned + ' points', 'success', '🏆');
+            } else {
+                showToast('Design tested! +' + earned + ' points', 'success', '✅');
+            }
+            saveState();
+        }
+
+        function resetDesign() {
+            initProsthetic();
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  GAME: DEFENDER — FIXED AUTO-WIN
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        let defenderLoop = null;
+        let germSpawnTimer = null;
+        let powerupTimer = null;
+
+        function initDefender() {
+            stopDefender();
+
+            const area = document.getElementById('defender-area');
+            area.innerHTML = '<div class="combo-display" id="combo-display">🔥 Combo x3!</div>';
+
+            state.defender = {
+                score: 0,
+                wave: 0,
+                cells: [],
+                germs: [],
+                combo: 0,
+                maxCombo: 1,
+                shieldActive: false,
+                running: false,
+                powerups: [],
+                gameScore: 0,
+                totalGerms: 0,
+                spawnedCount: 0,
+                spawningComplete: false
+            };
+            updateDefenderHUD();
+            document.getElementById('start-wave-btn').style.display = 'block';
+            document.getElementById('start-wave-btn').textContent = '▶️ Start Wave';
+            document.getElementById('wave-info').textContent = 'Click "Start Wave" to begin!';
+            document.getElementById('defender-fact').className = 'defender-fact-box';
+            document.getElementById('defender-fact').textContent = '';
+            document.getElementById('defender-area').classList.remove('shield-active');
+        }
+
+        function updateDefenderHUD() {
+            const alive = state.defender.cells.filter(function(c) { return !c.infected; }).length;
+            document.getElementById('defender-score').textContent = state.defender.score;
+            document.getElementById('defender-wave').textContent = state.defender.wave;
+            document.getElementById('defender-cells').textContent = alive;
+            document.getElementById('defender-combo').textContent = state.defender.maxCombo;
+        }
+
+        function startWave() {
+            if (state.defender.running) return;
+
+            // Reset for new wave
+            state.defender.combo = 0;
+            state.defender.maxCombo = 1;
+            state.defender.running = true;
+            state.defender.wave++;
+            state.defender.spawningComplete = false;
+            state.defender.spawnedCount = 0;
+            state.defender.germs = [];
+            state.defender.gameScore = state.defender.score;
+
+            document.getElementById('start-wave-btn').style.display = 'none';
+            document.getElementById('wave-info').textContent = '🌊 Wave ' + state.defender.wave + ' — Destroy the germs!';
+            document.getElementById('defender-fact').className = 'defender-fact-box';
+            document.getElementById('defender-fact').textContent = '';
+
+            const area = document.getElementById('defender-area');
+            const rect = area.getBoundingClientRect();
+            const w = rect.width || 600;
+            const h = rect.height || 400;
+
+            // Clear old germs & powerups
+            area.querySelectorAll('.germ, .powerup').forEach(function(el) { el.remove(); });
+
+            // Spawn healthy cells
+            state.defender.cells = [];
+            for (let i = 0; i < 5; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'healthy-cell';
+                cell.textContent = '🟢';
+                const x = 10 + (w - 70) * (i / 4);
+                const y = h / 2 - 24 + (Math.random() - 0.5) * 100;
+                const clampedY = Math.max(10, Math.min(h - 58, y));
+                cell.style.left = x + 'px';
+                cell.style.top = clampedY + 'px';
+                area.appendChild(cell);
+                state.defender.cells.push({ el: cell, x: x, y: clampedY, infected: false });
+            }
+
+            // Determine germ count
+            const germCount = Math.min(30, 5 + state.defender.wave * 3);
+            state.defender.totalGerms = germCount;
+            state.defender.spawnedCount = 0;
+            state.defender.spawningComplete = false;
+
+            const speed = Math.max(0.35, 1.6 - state.defender.wave * 0.08);
+
+            // Spawn germs with interval
+            if (germSpawnTimer) clearInterval(germSpawnTimer);
+            germSpawnTimer = setInterval(function() {
+                if (!state.defender.running) {
+                    clearInterval(germSpawnTimer);
+                    germSpawnTimer = null;
+                    return;
+                }
+                if (state.defender.spawnedCount < state.defender.totalGerms) {
+                    spawnGerm(speed);
+                    state.defender.spawnedCount++;
+                } else {
+                    // All germs spawned
+                    state.defender.spawningComplete = true;
+                    clearInterval(germSpawnTimer);
+                    germSpawnTimer = null;
+                }
+            }, 600);
+
+            // Powerup spawner
+            if (powerupTimer) clearInterval(powerupTimer);
+            powerupTimer = setInterval(function() {
+                if (!state.defender.running) return;
+                if (Math.random() < 0.25) spawnPowerup();
+            }, 5000);
+
+            // Main game loop
+            if (defenderLoop) clearInterval(defenderLoop);
+            defenderLoop = setInterval(function() {
+                if (!state.defender.running) return;
+                updateGerms();
+                checkWaveEnd();
+            }, 40);
+
+            updateDefenderHUD();
+        }
+
+        function spawnGerm(speed) {
+            const area = document.getElementById('defender-area');
+            const rect = area.getBoundingClientRect();
+            const w = rect.width || 600;
+            const h = rect.height || 400;
+
+            const germ = document.createElement('div');
+            germ.className = 'germ';
+            const germEmojis = ['🦠', '🦟', '🐛', '🪰', '🪱'];
+            germ.textContent = germEmojis[Math.floor(Math.random() * germEmojis.length)];
+
+            // Target: a random healthy cell
+            const alive = state.defender.cells.filter(function(c) { return !c.infected; });
+            let tx = w / 2,
+                ty = h / 2;
+            if (alive.length > 0) {
+                const target = alive[Math.floor(Math.random() * alive.length)];
+                tx = target.x + 24;
+                ty = target.y + 24;
+            }
+
+            const side = Math.floor(Math.random() * 4);
+            let x, y;
+            if (side === 0) { x = Math.random() * w;
+                y = -30; } else if (side === 1) { x = w + 30;
+                y = Math.random() * h; } else if (side === 2) { x = Math.random() * w;
+                y = h + 30; } else { x = -30;
+                y = Math.random() * h; }
+
+            const angle = Math.atan2(ty - y, tx - x);
+            const vx = Math.cos(angle) * speed;
+            const vy = Math.sin(angle) * speed;
+
+            germ.style.left = x + 'px';
+            germ.style.top = y + 'px';
+            germ.addEventListener('click', function(e) { destroyGerm(e, germ); });
+            area.appendChild(germ);
+
+            state.defender.germs.push({ el: germ, x: x, y: y, vx: vx, vy: vy });
+        }
+
+        function spawnPowerup() {
+            const area = document.getElementById('defender-area');
+            const rect = area.getBoundingClientRect();
+            const w = rect.width || 600;
+            const h = rect.height || 400;
+            const powerup = document.createElement('div');
+            powerup.className = 'powerup';
+            powerup.textContent = '🛡️';
+            const x = 30 + Math.random() * (w - 60);
+            const y = 30 + Math.random() * (h - 60);
+            powerup.style.left = x + 'px';
+            powerup.style.top = y + 'px';
+            powerup.addEventListener('click', function(e) { activateShield(e, powerup); });
+            area.appendChild(powerup);
+
+            setTimeout(function() {
+                if (powerup.parentNode) powerup.remove();
+            }, 5000);
+        }
+
+        function destroyGerm(e, germEl) {
+            e.stopPropagation();
+            if (!state.defender.running) return;
+
+            state.defender.combo++;
+            const multiplier = Math.min(5, 1 + Math.floor(state.defender.combo / 5));
+            state.defender.maxCombo = Math.max(state.defender.maxCombo, multiplier);
+            const points = 10 * multiplier;
+            state.defender.score += points;
+
+            if (multiplier > 1) {
+                const comboEl = document.getElementById('combo-display');
+                comboEl.textContent = '🔥 Combo x' + multiplier + '!';
+                comboEl.classList.add('show');
+                setTimeout(function() { comboEl.classList.remove('show'); }, 1500);
+            }
+
+            germEl.classList.add('pop');
+            spawnParticlesAt(e.clientX || window.innerWidth / 2, e.clientY || window.innerHeight / 2, '💥');
+            setTimeout(function() { germEl.remove(); }, 300);
+
+            state.defender.germs = state.defender.germs.filter(function(g) { return g.el !== germEl; });
+            updateDefenderHUD();
+        }
+
+        function activateShield(e, powerupEl) {
+            e.stopPropagation();
+            powerupEl.remove();
+            state.defender.shieldActive = true;
+            document.getElementById('defender-area').classList.add('shield-active');
+            state.defender.cells.forEach(function(c) {
+                if (!c.infected) c.el.classList.add('shielded');
+            });
+            showToast('🛡️ Shield activated! Cells protected for 3s!', 'info', '🛡️');
+
+            setTimeout(function() {
+                state.defender.shieldActive = false;
+                document.getElementById('defender-area').classList.remove('shield-active');
+                state.defender.cells.forEach(function(c) { c.el.classList.remove('shielded'); });
+            }, 3000);
+        }
+
+        function updateGerms() {
+            const area = document.getElementById('defender-area');
+            const rect = area.getBoundingClientRect();
+            const w = rect.width || 600;
+            const h = rect.height || 400;
+
+            const toRemove = [];
+
+            state.defender.germs.forEach(function(g) {
+                g.x += g.vx;
+                g.y += g.vy;
+                g.el.style.left = g.x + 'px';
+                g.el.style.top = g.y + 'px';
+
+                // Collision with cells
+                state.defender.cells.forEach(function(c) {
+                    if (c.infected) return;
+                    const dx = g.x - c.x;
+                    const dy = g.y - c.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 38) {
+                        if (state.defender.shieldActive) {
+                            // Bounce off
+                            g.vx = -g.vx * 1.6;
+                            g.vy = -g.vy * 1.6;
+                            g.x += g.vx * 3;
+                            g.y += g.vy * 3;
+                        } else {
+                            c.infected = true;
+                            c.el.classList.add('infected');
+                            c.el.textContent = '⚫';
+                            state.defender.score = Math.max(0, state.defender.score - 5);
+                            state.defender.combo = 0;
+                            showToast('Cell infected! -5 points', 'error', '⚫');
+                            updateDefenderHUD();
+                        }
+                    }
+                });
+
+                if (g.x < -120 || g.x > w + 120 || g.y < -120 || g.y > h + 120) {
+                    toRemove.push(g);
+                }
+            });
+
+            toRemove.forEach(function(g) {
+                g.el.remove();
+                state.defender.germs = state.defender.germs.filter(function(item) { return item !== g; });
+            });
+        }
+
+        function checkWaveEnd() {
+            const aliveCells = state.defender.cells.filter(function(c) { return !c.infected; }).length;
+            const germsLeft = state.defender.germs.length;
+
+            // Only end wave if all germs spawned AND all destroyed AND cells alive
+            if (state.defender.spawningComplete && germsLeft === 0 && aliveCells > 0) {
+                const waveBonus = state.defender.wave * 20;
+                state.defender.score += waveBonus;
+                showToast('Wave ' + state.defender.wave + ' complete! +' + waveBonus + ' bonus!', 'success', '🎉');
+
+                const facts = [
+                    "💉 Vaccines train your immune system to recognize and fight specific germs!",
+                    "🧬 White blood cells are your body's soldiers — they hunt and destroy invaders.",
+                    "🔬 Biomedical engineers design antibody therapies that help your immune system target cancer cells.",
+                    "🦠 Not all bacteria are bad — your gut has trillions of helpful bacteria!",
+                    "🧪 The first vaccine was developed in 1796 for smallpox by Edward Jenner.",
+                    "💊 Antibiotics kill bacteria but not viruses — that's why you can't take antibiotics for the flu!",
+                    "🛡️ Your skin is your first line of defense against germs entering your body.",
+                    "🔬 Biomedical engineers are creating lab-grown immune cells for personalized cancer treatment."
+                ];
+                const factEl = document.getElementById('defender-fact');
+                factEl.textContent = facts[Math.floor(Math.random() * facts.length)];
+                factEl.className = 'defender-fact-box show';
+                addKnowledgePoints(2);
+
+                endWave();
+            } else if (aliveCells === 0 && state.defender.running) {
+                endDefenderGame();
+            }
+        }
+
+        function endWave() {
+            state.defender.running = false;
+            if (defenderLoop) { clearInterval(defenderLoop);
+                defenderLoop = null; }
+            if (germSpawnTimer) { clearInterval(germSpawnTimer);
+                germSpawnTimer = null; }
+            if (powerupTimer) { clearInterval(powerupTimer);
+                powerupTimer = null; }
+
+            // Remove remaining germs
+            state.defender.germs.forEach(function(g) { g.el.remove(); });
+            state.defender.germs = [];
+            document.querySelectorAll('.powerup').forEach(function(p) { p.remove(); });
+
+            document.getElementById('start-wave-btn').style.display = 'block';
+            document.getElementById('start-wave-btn').textContent = '▶️ Next Wave';
+            document.getElementById('wave-info').textContent = 'Wave ' + state.defender.wave + ' complete! Ready for next?';
+            updateDefenderHUD();
+        }
+
+        function endDefenderGame() {
+            state.defender.running = false;
+            if (defenderLoop) { clearInterval(defenderLoop);
+                defenderLoop = null; }
+            if (germSpawnTimer) { clearInterval(germSpawnTimer);
+                germSpawnTimer = null; }
+            if (powerupTimer) { clearInterval(powerupTimer);
+                powerupTimer = null; }
+
+            const finalScore = state.defender.score;
+            addScore(finalScore);
+            addKnowledgePoints(state.defender.wave * 2);
+
+            if (finalScore > state.bestScores.defender) {
+                state.bestScores.defender = finalScore;
+                showToast('New Best Score!', 'success', '🏆');
+            }
+            saveState();
+
+            showModal('🛡️ Game Over!',
+                'You survived ' + state.defender.wave + ' waves!\n' +
+                'Final Score: ' + finalScore + ' points\n' +
+                'Max Combo: x' + state.defender.maxCombo + '\n' +
+                'Knowledge Points: +' + (state.defender.wave * 2) + ' ⭐'
+            );
+
+            initDefender();
+        }
+
+        function stopDefender() {
+            state.defender.running = false;
+            if (defenderLoop) { clearInterval(defenderLoop);
+                defenderLoop = null; }
+            if (germSpawnTimer) { clearInterval(germSpawnTimer);
+                germSpawnTimer = null; }
+            if (powerupTimer) { clearInterval(powerupTimer);
+                powerupTimer = null; }
+            const area = document.getElementById('defender-area');
+            if (area) {
+                area.querySelectorAll('.germ, .powerup, .healthy-cell').forEach(function(el) { el.remove(); });
+                if (!area.querySelector('#combo-display')) {
+                    const combo = document.createElement('div');
+                    combo.className = 'combo-display';
+                    combo.id = 'combo-display';
+                    combo.textContent = '🔥 Combo x3!';
+                    area.appendChild(combo);
+                }
+            }
+            document.getElementById('defender-area').classList.remove('shield-active');
+            document.getElementById('start-wave-btn').style.display = 'block';
+            document.getElementById('start-wave-btn').textContent = '▶️ Start Wave';
+            document.getElementById('wave-info').textContent = 'Click "Start Wave" to begin!';
+            document.getElementById('defender-fact').className = 'defender-fact-box';
+            document.getElementById('defender-fact').textContent = '';
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  PARTICLES
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function spawnParticles(element, emoji) {
+            const rect = element.getBoundingClientRect();
+            spawnParticlesAt(rect.left + rect.width / 2, rect.top + rect.height / 2, emoji);
+        }
+
+        function spawnParticlesAt(x, y, emoji) {
+            for (let i = 0; i < 6; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.textContent = emoji;
+                p.style.left = x + 'px';
+                p.style.top = y + 'px';
+                const angle = (Math.PI * 2 * i) / 6;
+                const dist = 50 + Math.random() * 50;
+                p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+                p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+                document.body.appendChild(p);
+                setTimeout(function() { p.remove(); }, 900);
+            }
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  AUDIO (lazy)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        let audioCtx = null;
+
+        function getAudioCtx() {
+            if (!audioCtx) {
+                audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioCtx;
+        }
+
+        function playBeep(freq, duration, type) {
+            freq = freq || 800;
+            duration = duration || 0.1;
+            type = type || 'sine';
+            try {
+                const ctx = getAudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch (e) { /* ignore */ }
+        }
+
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.system-btn.correct')) playBeep(880, 0.15);
+            else if (e.target.closest('.system-btn.wrong')) playBeep(200, 0.2, 'sawtooth');
+            else if (e.target.closest('.germ')) playBeep(1200, 0.08);
+            else if (e.target.closest('.game-card')) playBeep(600, 0.05);
+        });
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  KEYBOARD SHORTCUTS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') backToMenu();
+        });
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  INIT
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        loadState();
+        // Pre-build ECG on load
+        setTimeout(function() { buildECG(75); }, 100);
+        console.log('🧬 BioMed Explorer loaded! Have fun learning biomedical engineering!');
+    </script>
+</body>
+</html>
